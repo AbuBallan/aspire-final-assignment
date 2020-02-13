@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    # Auto tables generation
+    generate-ddl: true
+    # db migration option
+    hibernate:
+      ddl-auto: update
+  # Enable web h2 console ( /h2-console )
+  h2:
+    console:
+      enabled: true
+  # datasource url
+  datasource:
+    url: jdbc:h2:mem:cartdb
+  cloud:
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+      bindings:
+        item-queue:
+          destination: item-queue
+          group: event-listener-group
+        item-events:
+          destination: item-events
+          durabilitySupport: true
+          producer:
+            partitionCount: 2
+

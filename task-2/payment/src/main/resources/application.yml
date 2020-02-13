@@ -1,0 +1,55 @@
+server:
+  port: ${port:2022}
+
+spring:
+  jpa:
+    # Auto tables generation
+    generate-ddl: true
+    # db migration option
+    hibernate:
+      ddl-auto: update
+  # Enable web h2 console ( /h2-console )
+  h2:
+    console:
+      enabled: true
+  # datasource url
+  datasource:
+    url: jdbc:h2:mem:paymentdb
+  cloud:
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+      bindings:
+        pending-payment:
+          destination: pending-payment-added
+          group: pending-payment-added-listener
+        paid-payment:
+          destination: paid-payment
+          durabilitySupport: true
+          producer:
+            partitionCount: 2
+
+com:
+  ab:
+    exceptions:
+      NoHandlerFoundForCommandException:
+        code: 1000
+        messages:
+          AR: لا يوجد من يقوم بتلبية طلبك
+          EN: No Handler For Command
+      NoHandlerFoundForQueryException:
+        code: 2000
+        messages:
+          AR: لا يوجد من يقوم بتلبية طلبك
+          EN: No Handler For Query
+      PaymentIncorrectStateException:
+        code: 3000
+        messages:
+          AR: خلل في حالة الدفع
+          EN: Payment Incorrect State
+      PaymentNotFoundException:
+        code: 3001
+        messages:
+          AR: طلب الدفع غير موجود
+          EN: Payment Not Found

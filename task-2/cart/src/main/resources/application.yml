@@ -1,0 +1,42 @@
+server:
+  port: ${port:2020}
+
+spring:
+  jpa:
+    # Auto tables generation
+    generate-ddl: true
+    # db migration option
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  # Enable web h2 console ( /h2-console )
+  h2:
+    console:
+      enabled: true
+  # datasource url
+  datasource:
+    url: jdbc:h2:mem:cartdb
+  cloud:
+    stream:
+      kafka:
+        binder:
+          auto-add-partitions: true
+      bindings:
+        item-added-queue:
+          destination: item-events
+          group: item-added-cart-listener
+        cart-paid:
+          destination: paid-payment
+          group: cart-paid-cart-listener
+        cart-checked-out:
+          destination: cart-checked-out
+          durabilitySupport: true
+          producer:
+            partitionCount: 2
+        cart-pending-payment:
+          destination: pending-payment-added
+          durabilitySupport: true
+          producer:
+            partitionCount: 2

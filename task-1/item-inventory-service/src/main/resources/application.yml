@@ -1,0 +1,32 @@
+server:
+  port: 2020
+
+
+spring:
+  application:
+    name: item-inventory-service
+  jpa:
+    # Auto tables generation
+    generate-ddl: false
+    # db migration option
+    hibernate:
+      ddl-auto: validate
+  # datasource url
+  datasource:
+    url: jdbc:mysql://localhost:3306/iteminventorydb
+    username: "root"
+    password: "0000"
+
+com:
+  aspire:
+    exceptions:
+      NoHandlerFoundForCommandException:
+        code: "0001"
+        messages:
+          EN: No Command Handler Found
+          AR: لايوجد من يقوم بتلبية الطلب
+      NoHandlerFoundForQueryException:
+        code: "0002"
+        messages:
+          EN: No Query Handler Found
+          AR: لايوجد من يقوم بتلبية الطلب
